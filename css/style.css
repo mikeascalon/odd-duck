@@ -1,0 +1,21 @@
+section {
+    
+    display: flex;
+    width: 200px; /* Set the desired width */
+    height: 200px; /* Set the desired height */
+    margin: 10px;
+    
+   
+    
+   
+  }
+
+  section img {
+
+    width: 100%; /* Make the image fill the container */
+    height: 100%;
+    margin: 10px;
+    
+
+  }
+
