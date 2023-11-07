@@ -2,16 +2,25 @@
 
 let workingNewProducts = [];
 const allNewProducts =[];
+let firstNewproduct = null;
+let secondNewproduct = null;
+let thirdNewproduct = null;
+let totalClicks=0;
+const maxClicks = 25;
 
-const leftImg = document.querySelector('section img:first-child')
-const middleImg = document.querySelector('section img:nth-child(2)')
-const rightImg = document.querySelector('section img:nth-child(3)')
+const leftImg = document.querySelector('section img:first-child');
+const middleImg = document.querySelector('section img:nth-child(2)');
+const rightImg = document.querySelector('section img:nth-child(3)');
+const viewResults=document.querySelector('div');
+const ulElem = document.querySelector('ul');
 
 
 
 function NewProducts (name, src) {
     this.name = name;
     this.src = src;
+    this.views = 0;
+    this.clicks = 0;
 
 }
 
@@ -63,6 +72,17 @@ allNewProducts.push(wineGlass);
 
 function renderNewProducts(){
 
+    if(totalClicks == maxClicks){
+        viewResults.addEventListener('click', handleViewResultsClick);
+
+        // also, disable the left and right imgs
+        leftImg.removeEventListener('click', handleLeftNewProductClick);
+        middleImg.removeEventListener('click',handleMiddleNewProductClick);
+        rightImg.removeEventListener('click', handleRightNewProductClick);
+
+
+    }
+
 
     if(workingNewProducts.length <= 2){
     workingNewProducts = allNewProducts.slice();
@@ -70,21 +90,24 @@ function renderNewProducts(){
     }
 
 
-const firstNewproduct = workingNewProducts.pop();
+firstNewproduct = workingNewProducts.pop();
 leftImg.setAttribute('src',firstNewproduct.src)
 
-const secondNewproduct = workingNewProducts.pop();
+secondNewproduct = workingNewProducts.pop();
 middleImg.setAttribute('src',secondNewproduct.src)
 
 
-const thirdNewproduct = workingNewProducts.pop();
+thirdNewproduct = workingNewProducts.pop();
 rightImg.setAttribute('src',thirdNewproduct.src)
+
+    firstNewproduct.views += 1;
+    secondNewproduct.views += 1;
+    thirdNewproduct.views += 1;
 
 }
 
-
-
 renderNewProducts();
+
 
 
 function shuffleArray(array) {
@@ -94,19 +117,28 @@ function shuffleArray(array) {
     }
 }
 function handleLeftNewProductClick(event){
+    firstNewproduct.clicks += 1;
     renderNewProducts();
-    
+    totalClicks += 1;
+
 }
 
 function handleMiddleNewProductClick(event){
+    secondNewproduct.clicks += 1;
     renderNewProducts();
+    totalClicks += 1;
     
 }
 
 function handleRightNewProductClick(event){
+    thirdNewproduct.clicks += 1;
     renderNewProducts();
-
+    totalClicks += 1;
     
+}
+
+function handleViewResultsClick() {
+     renderResults();
 }
 
 
@@ -115,8 +147,13 @@ leftImg.addEventListener('click',handleLeftNewProductClick);
 middleImg.addEventListener('click',handleMiddleNewProductClick);
 rightImg.addEventListener('click',handleRightNewProductClick);
 
-
-
-
-  
-  
+function renderResults(){
+    for( let i = 0 ; i < allNewProducts.length; i++){
+        const currentNewProduct = allNewProducts[i];
+        const result = `${currentNewProduct.name}` + '-' + `${currentNewProduct.views}` + ':' + `${currentNewProduct.clicks}`;
+       
+        const liElem = document.createElement('li');
+        ulElem.appendChild(liElem);
+        liElem.textContent = result;
+    }
+}
